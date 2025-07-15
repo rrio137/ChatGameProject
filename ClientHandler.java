@@ -28,7 +28,7 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         } finally {
             try {
-                clients.remove(this); // Remove from list on disconnect
+                clients.remove(this);
                 clientSocket.close();
                 System.out.println("Client disconnected.");
             } catch (IOException e) {
@@ -37,16 +37,14 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    // Send a message to this client
     public void sendMessage(String message) {
         out.println(message);
     }
 
-    // Broadcast to all clients
     private void broadcast(String message) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                if (client != this) { // Skip sender if you want
+                if (client != this) {
                     client.sendMessage(message);
                 }
             }

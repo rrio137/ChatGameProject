@@ -15,7 +15,7 @@ public class ChatServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("New client connected.");
 
-                ClientHandler clientHandler = new ClientHandler(clientSocket);
+                ClientHandler clientHandler = new ClientHandler(clientSocket, clients);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }

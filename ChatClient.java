@@ -11,18 +11,35 @@ public class ChatClient {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+
+            Thread readerThread = new Thread(() -> {
+                String serverMessage;
+                try {
+                    while ((serverMessage = in.readLine()) != null) {
+                        System.out.println("\n[Message from server]: " + serverMessage);
+                        System.out.print("You: ");
+                    }
+                } catch (IOException e) {
+                    System.out.println("Connection closed.");
+                }
+            });
+
+            readerThread.start();
 
             String userMessage;
             while (true) {
-                System.out.print("Client");
+                System.out.print("You: ");
                 userMessage = userInput.readLine();
                 out.println(userMessage);
 
-                String serverMessage = in.readLine();
-                System.out.println("Server: " + serverMessage);
+                if (userMessage.equalsIgnoreCase("/exit")) {
+                    System.out.println("Goodbye!");
+                    socket.close();
+                    break;
+                }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
