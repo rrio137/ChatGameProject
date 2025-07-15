@@ -1,7 +1,10 @@
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class ChatServer {
+    private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
+
     public static void main(String[] args) {
         int port = 12345;
 
